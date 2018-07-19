@@ -10,7 +10,7 @@ import (
 
 func ExecShell(shellPath string) {
 	if exist := fileExist(shellPath); !exist {
-		log.Error("shell file not exist")
+		log.Error("shell file not exist, ", shellPath)
 		return
 	}
 	cmd := exec.Command("/bin/sh", shellPath)

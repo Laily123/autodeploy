@@ -13,7 +13,7 @@ type ConfigStruct struct {
 	Name      string `toml:"name"`
 	Secret    string `toml:"secret"`
 	Dir       string `toml:"dir"`
-	ShellName string `shell_name`
+	ShellName string `toml:"shell_name"`
 }
 
 type configsStruct struct {

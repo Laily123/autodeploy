@@ -37,7 +37,7 @@ func Gitea(w http.ResponseWriter, r *http.Request) {
 		ResponseErr(w)
 	}
 
-	ExecShell(configInfo.ShellName)
+	ExecShell(configInfo.Dir+"/"+configInfo.ShellName)
 
 	writer := bufio.NewWriter(w)
 	writer.WriteString("hello")
