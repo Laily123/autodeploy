@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"net/http"
 	"os"
 	"os/exec"
 
@@ -27,4 +28,9 @@ func fileExist(filePath string) bool {
 		return os.IsExist(err)
 	}
 	return true
+}
+
+func ResponseErr(w http.ResponseWriter) {
+	w.WriteHeader(501)
+	w.Write([]byte{})
 }

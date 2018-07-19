@@ -1,37 +1,28 @@
 package main
 
 import (
+	"autodeploy/config"
+	"autodeploy/handler"
 	"flag"
-
-	"bufio"
-	"io/ioutil"
 	"net/http"
 
 	log "github.com/sirupsen/logrus"
 )
 
 var (
-	port = ""
+	port       = ""
+	configFile = ""
 )
 
 func init() {
 	flag.StringVar(&port, "port", "8000", "server port")
+	flag.StringVar(&configFile, "config", "./config.toml", "config file path")
 	flag.Parse()
 }
 
-func handlerGitea(w http.ResponseWriter, r *http.Request) {
-	req, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Error("get gitea request body err: ", err, r.URL.String())
-	}
-	log.Info("body: ", string(req))
-	writer := bufio.NewWriter(w)
-	writer.WriteString("hello")
-	writer.Flush()
-}
-
 func main() {
-	http.HandleFunc("/gitea", handlerGitea)
+	http.HandleFunc("/gitea", handler.Gitea)
+	config.ParseConfig(configFile)
 	log.Info("server start: ", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }

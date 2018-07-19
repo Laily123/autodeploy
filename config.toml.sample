@@ -1,0 +1,12 @@
+#example
+#[[project]]
+#name = ""
+#secret = ""
+#dir = ""
+#shell_name = ""
+
+[[project]]
+name="autodeploy"
+secret = ""
+dir = "123"
+shell_name = "dep.sh"
