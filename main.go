@@ -20,7 +20,7 @@ func init() {
 	flag.StringVar(&port, "port", "8000", "server port")
 	flag.StringVar(&configFile, "config", "./config.toml", "config file path")
 	flag.Parse()
-	file, err := os.OpenFile("./logs/autodeploy.log", os.O_CREATE|os.O_WRONLY, 0666)
+	file, err := os.OpenFile("./logs/autodeploy.log", os.O_CREATE|os.O_APPEND|os.O_RDWR, 0666)
 	if err != nil {
 		log.Fatal("open log file err: ", err)
 	}
