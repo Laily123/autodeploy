@@ -44,7 +44,10 @@ func Gitea(w http.ResponseWriter, r *http.Request) {
 func getPushData(data string) *PushInfoStruct {
 	info := &PushInfoStruct{}
 	info.Secret = gjson.Get(data, "secret").String()
-	info.ProjectAddr = gjson.Get(data, "repository.html_url").String()
+	addr := gjson.Get(data, "repository.html_url").String()
+	addr = strings.Replace(addr, "https://", "", 1)
+	addr = strings.Replace(addr, "http://", "", 1)
+	info.ProjectAddr = addr
 	branchInfo := gjson.Get(data, "refs").String()
 	arr := strings.Split(branchInfo, "/")
 	info.Branch = arr[len(arr)-1]
