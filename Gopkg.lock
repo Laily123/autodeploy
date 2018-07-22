@@ -14,6 +14,18 @@
   version = "v1.0.5"
 
 [[projects]]
+  name = "github.com/tidwall/gjson"
+  packages = ["."]
+  revision = "f123b340873a0084cb27267eddd8ff615115fbff"
+  version = "v1.1.2"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/tidwall/match"
+  packages = ["."]
+  revision = "1731857f09b1f38450e2c12409748407822dc6be"
+
+[[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["ssh/terminal"]
@@ -28,6 +40,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "8e4d464a7c676905c40347e97949a9eacabb68344400ca25c973b6820a6c5859"
+  inputs-digest = "b2ecbf01e9f1ec9741024dff58f9cf3bc389bc4741743a1d51bfcdb1c66a33da"
   solver-name = "gps-cdcl"
   solver-version = 1
