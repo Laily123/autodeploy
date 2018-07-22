@@ -3,7 +3,7 @@
 #project_addr = "" // 项目地址
 #secret = "" // webhook secret
 #dir = "" // 项目目录
-#shell_name = ""
+#shell_name = "" // shell 脚本地址根据 dir + shell_name 得来
 
 [[project]]
 project_addr="http://github.com/Laily123/test" 

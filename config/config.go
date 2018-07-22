@@ -10,7 +10,7 @@ var (
 )
 
 type ConfigStruct struct {
-	Name      string `toml:"name"`
+	Addr      string `toml:"project_addr"`
 	Secret    string `toml:"secret"`
 	Dir       string `toml:"dir"`
 	ShellName string `toml:"shell_name"`
@@ -27,6 +27,6 @@ func ParseConfig(filePath string) {
 		log.Panic("parse config err: ", err)
 	}
 	for k, v := range configs.Configs {
-		Config[v.Name] = configs.Configs[k]
+		Config[v.Addr] = configs.Configs[k]
 	}
 }

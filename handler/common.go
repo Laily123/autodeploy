@@ -8,12 +8,18 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func ExecShell(shellPath string) {
+func ExecShell(path, shellName string) {
+	shellPath := path
+	if path[len(path)-1] != '/' {
+		shellPath += "/"
+	}
+	shellPath += shellName
 	if exist := fileExist(shellPath); !exist {
 		log.Error("shell file not exist, ", shellPath)
 		return
 	}
 	cmd := exec.Command("/bin/sh", shellPath)
+	cmd.Dir = path
 	output, err := cmd.Output()
 	if err != nil {
 		log.Errorf("exec comment %s err:]\n%s\n", shellPath, err)

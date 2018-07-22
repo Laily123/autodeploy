@@ -15,6 +15,8 @@ func Gitea(w http.ResponseWriter, r *http.Request) {
 	req, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Errorf("get gitea request body err: %s, url: %s\n", err, r.URL.String())
+		ResponseErr(w)
+		return
 	}
 	pushData := string(req)
 	pushInfo := getPushData(pushData)
@@ -30,7 +32,7 @@ func Gitea(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ExecShell(configInfo.Dir + "/" + configInfo.ShellName)
+	ExecShell(configInfo.Dir, configInfo.ShellName)
 
 	writer := bufio.NewWriter(w)
 	writer.WriteString("hello")
