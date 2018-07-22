@@ -22,7 +22,7 @@ func ExecShell(path, shellName string) {
 	cmd.Dir = path
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		log.Errorf("exec comment %s err: %s\n", shellPath, err)
+		log.Errorf("exec comment %s err: %s, %s", shellPath, string(output), err)
 		return
 	}
 	log.Infof("exec command %s:%s\n", shellPath, string(output))
