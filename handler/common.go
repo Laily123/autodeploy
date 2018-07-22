@@ -18,14 +18,14 @@ func ExecShell(path, shellName string) {
 		log.Error("shell file not exist, ", shellPath)
 		return
 	}
-	cmd := exec.Command("/bin/sh", shellPath)
+	cmd := exec.Command("/bin/bash", shellPath)
 	cmd.Dir = path
-	output, err := cmd.Output()
+	output, err := cmd.CombinedOutput()
 	if err != nil {
-		log.Errorf("exec comment %s err:]\n%s\n", shellPath, err)
+		log.Errorf("exec comment %s err: %s\n", shellPath, err)
 		return
 	}
-	log.Infof("exec command %s succ:\n%s\n", shellPath, string(output))
+	log.Infof("exec command %s:%s\n", shellPath, string(output))
 }
 
 func fileExist(filePath string) bool {

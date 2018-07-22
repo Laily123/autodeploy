@@ -6,5 +6,5 @@ import (
 
 func TestExec(t *testing.T) {
 	file := "./test.sh"
-	ExecShell(file)
+	ExecShell("", file)
 }
