@@ -14,7 +14,7 @@ import (
 func Gitea(w http.ResponseWriter, r *http.Request) {
 	req, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		log.Errorf("get gitea request body err: %s, url: %s\n", err, r.URL.String())
+		log.Errorf("get gitea request body err: %s, url: %s", err, r.URL.String())
 		ResponseErr(w)
 		return
 	}
@@ -22,12 +22,12 @@ func Gitea(w http.ResponseWriter, r *http.Request) {
 	pushInfo := getPushData(pushData)
 	configInfo, ok := config.Config[pushInfo.ProjectAddr]
 	if !ok {
-		log.Errorf("request repository addr is not match, get %s\n", pushInfo.ProjectAddr)
+		log.Errorf("request repository addr is not match, get %s", pushInfo.ProjectAddr)
 		ResponseErr(w)
 		return
 	}
 	if pushInfo.Secret != configInfo.Secret {
-		log.Errorf("secret not match\n")
+		log.Errorf("secret not match")
 		ResponseErr(w)
 		return
 	}
@@ -47,7 +47,7 @@ func getPushData(data string) *PushInfoStruct {
 	addr := gjson.Get(data, "repository.html_url").String()
 	addr = strings.Replace(addr, "https://", "", 1)
 	addr = strings.Replace(addr, "http://", "", 1)
-	info.ProjectAddr = addr
+	info.ProjectAddr = strings.TrimSpace(addr)
 	branchInfo := gjson.Get(data, "refs").String()
 	arr := strings.Split(branchInfo, "/")
 	info.Branch = arr[len(arr)-1]
