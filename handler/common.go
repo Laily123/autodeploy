@@ -34,3 +34,10 @@ func ResponseErr(w http.ResponseWriter) {
 	w.WriteHeader(501)
 	w.Write([]byte{})
 }
+
+// PushInfo push 过来的数据
+type PushInfoStruct struct {
+	Secret      string
+	Branch      string
+	ProjectAddr string
+}

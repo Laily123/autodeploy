@@ -1,12 +1,12 @@
 #example
 #[[project]]
-#name = ""
-#secret = ""
-#dir = ""
+#project_addr = "" // 项目地址
+#secret = "" // webhook secret
+#dir = "" // 项目目录
 #shell_name = ""
 
 [[project]]
-name="autodeploy"
+project_addr="http://github.com/Laily123/test" 
 secret = ""
-dir = "123"
-shell_name = "dep.sh"
+dir = "/home/Laily/test"
+shell_name = "deploy.sh"
