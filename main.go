@@ -1,14 +1,8 @@
 package main
 
 import (
-	"autodeploy/config"
-	"autodeploy/handler"
-	"flag"
-	"io"
-	"net/http"
+	"autodeploy/feature"
 	"os"
-
-	log "github.com/sirupsen/logrus"
 )
 
 var (
@@ -16,22 +10,16 @@ var (
 	configFile = ""
 )
 
-func init() {
-	flag.StringVar(&port, "port", "8000", "server port")
-	flag.StringVar(&configFile, "config", "./config.toml", "config file path")
-	flag.Parse()
-	file, err := os.OpenFile("./logs/autodeploy.log", os.O_CREATE|os.O_APPEND|os.O_RDWR, 0666)
-	if err != nil {
-		log.Fatal("open log file err: ", err)
+func initParams() {
+	args := os.Args[1:]
+	switch args[0] {
+	case "watch":
+		feature.StartWatcher(os.Args[0], args[1:])
+	case "server":
+		feature.Server(args[1:])
 	}
-	out := io.MultiWriter(file, os.Stdout)
-	log.SetOutput(out)
-
 }
 
 func main() {
-	http.HandleFunc("/gitea", handler.Gitea)
-	config.ParseConfig(configFile)
-	log.Info("server start: ", port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	initParams()
 }
