@@ -10,6 +10,10 @@ var (
 	configFile = ""
 )
 
+func init() {
+	//log.SetLevel(log.DebugLevel)
+}
+
 func initParams() {
 	args := os.Args[1:]
 	switch args[0] {

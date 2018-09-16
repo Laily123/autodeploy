@@ -74,16 +74,19 @@ func (w *Watcher) watch() {
 	if err != nil {
 		log.Fatal("Get watcher failed: ", err)
 	}
+	defer watcher.Close()
 
 	done := make(chan bool)
 	go func() {
 		for {
 			select {
-			case _, ok := <-watcher.Events:
+			case event, ok := <-watcher.Events:
 				if !ok {
 					return
 				}
+				log.Debug("event: ", event.String())
 				go w.execCMD()
+				w.addDir(watcher)
 			case err, ok := <-watcher.Errors:
 				if !ok {
 					return
@@ -92,11 +95,25 @@ func (w *Watcher) watch() {
 			}
 		}
 	}()
-	err = watcher.Add(w.dir)
-	if err != nil {
-		log.Fatal("watch err: ", err)
-	}
+
+	w.addDir(watcher)
 	<-done
+}
+
+// 将根目录下的子目录加入监控
+func (w *Watcher) addDir(watcher *fsnotify.Watcher) {
+	err := filepath.Walk(w.dir, func(path string, f os.FileInfo, err error) error {
+		if f.IsDir() {
+			err = watcher.Add(path)
+			if err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		log.Error("walk dir err: ", err)
+	}
 }
 
 // exec 当文件修改时执行命令
