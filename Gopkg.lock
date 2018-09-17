@@ -8,6 +8,12 @@
   version = "v0.3.0"
 
 [[projects]]
+  name = "github.com/fsnotify/fsnotify"
+  packages = ["."]
+  revision = "c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9"
+  version = "v1.4.7"
+
+[[projects]]
   name = "github.com/sirupsen/logrus"
   packages = ["."]
   revision = "c155da19408a8799da419ed3eeb0cb5db0ad5dbc"
@@ -40,6 +46,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "b2ecbf01e9f1ec9741024dff58f9cf3bc389bc4741743a1d51bfcdb1c66a33da"
+  inputs-digest = "ec20a972f7817c96d5413bed832f018cf192c95ba72e67d13dc7ce9993422bfc"
   solver-name = "gps-cdcl"
   solver-version = 1
