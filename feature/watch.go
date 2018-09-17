@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/fsnotify/fsnotify"
@@ -29,6 +30,7 @@ type Watcher struct {
 	cmdCancel context.CancelFunc
 	dir       string // 工作目录
 	cmdStr    string // cmd 执行的 shell 命令
+	oldPID    int
 }
 
 // StartWater 开启一个新的监控
@@ -39,6 +41,7 @@ func StartWatcher(workDir string, args []string) {
 	watcher.init(workDir, args)
 }
 func (w *Watcher) init(pwdDir string, args []string) {
+	defer w.kill()
 	dir, err := filepath.Abs(filepath.Dir(pwdDir))
 	if err != nil {
 		log.Fatal("Get dir err: ", err)
@@ -56,16 +59,13 @@ func (w *Watcher) init(pwdDir string, args []string) {
 
 // initCmd 初始化命令
 func (w *Watcher) initCmd() *exec.Cmd {
-	ctx, cancel := context.WithCancel(context.Background())
-	cmd := exec.CommandContext(ctx, "/bin/sh", "-c", w.cmdStr)
+	cmd := exec.Command("/bin/sh", "-c", w.cmdStr)
+	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
 	stderr, _ := cmd.StderrPipe()
 	stdout, _ := cmd.StdoutPipe()
 	go printCmdResult(stdout)
 	go printCmdResult(stderr)
-	if w.cmdCancel != nil {
-		w.cmdCancel()
-	}
-	w.cmdCancel = cancel
+	w.kill()
 	return cmd
 }
 
@@ -132,8 +132,22 @@ func (w *Watcher) execCMD() {
 	clear()
 	log.Infof("Rerun: [%s]", w.cmdStr)
 	cmd := w.initCmd()
-	cmd.Start()
+	err := cmd.Start()
+	if err == nil {
+		w.oldPID = cmd.Process.Pid
+	}
 	cmd.Wait()
+	w.kill()
+}
+
+func (w *Watcher) kill() {
+	if w.oldPID > 0 {
+		err := syscall.Kill(-w.oldPID, syscall.SIGKILL)
+		if err != nil {
+			log.Info("kill process err: ", err)
+		}
+		w.oldPID = 0
+	}
 }
 
 func printCmdResult(r io.Reader) {

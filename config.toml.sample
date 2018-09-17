@@ -5,8 +5,12 @@
 #dir = "" // 项目目录
 #shell_name = "" // shell 脚本地址根据 dir + shell_name 得来
 
+[app]
+port = ""
+log_path = ""
+
 [[project]]
-project_addr="http://github.com/Laily123/test" 
+project_addr = "http://github.com/Laily123/test" 
 secret = ""
 dir = "/home/Laily/test"
 shell_name = "deploy.sh"
