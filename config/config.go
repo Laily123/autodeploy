@@ -18,7 +18,8 @@ type ConfigStruct struct {
 }
 
 type appConfig struct {
-	Port string `toml:"port"`
+	Port  string   `toml:"port"`
+	Dings []string `toml:"dings"`
 }
 
 type configsStruct struct {

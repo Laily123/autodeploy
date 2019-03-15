@@ -15,7 +15,7 @@ func Gitea(w http.ResponseWriter, r *http.Request) {
 	req, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Errorf("get gitea request body err: %s, url: %s", err, r.URL.String())
-		ResponseErr(w)
+		ResponseErr(w, "")
 		return
 	}
 	pushData := string(req)
@@ -23,12 +23,12 @@ func Gitea(w http.ResponseWriter, r *http.Request) {
 	configInfo, ok := config.Config[pushInfo.ProjectAddr]
 	if !ok {
 		log.Errorf("request repository addr is not match, get %s", pushInfo.ProjectAddr)
-		ResponseErr(w)
+		ResponseErr(w, "")
 		return
 	}
 	if pushInfo.Secret != configInfo.Secret {
 		log.Errorf("secret not match")
-		ResponseErr(w)
+		ResponseErr(w, "")
 		return
 	}
 

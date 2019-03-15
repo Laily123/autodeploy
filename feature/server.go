@@ -6,7 +6,6 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"strings"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -20,21 +19,16 @@ func initLog() {
 	log.SetOutput(out)
 }
 
-func Server(params []string) {
+func Server(configPath string) {
 	initLog()
 
-	if len(params) == 0 {
-		log.Fatal("params err")
-	}
-	configPath := params[0]
-	if strings.HasPrefix(configPath, "-config=") {
-		configPath = strings.Replace(params[0], "-config=", "", -1)
-	} else {
-		log.Fatal("config params err")
+	if configPath == "" {
+		log.Fatal("config path error")
 	}
 	config.ParseConfig(configPath)
 
-	http.HandleFunc("/gitea", handler.Gitea)
+	//http.HandleFunc("/gitea", handler.Gitea)
+	http.HandleFunc("/ding", handler.Ding)
 	log.Info("server start: ", config.App.Port)
 	log.Fatal(http.ListenAndServe(":"+config.App.Port, nil))
 }

@@ -8,6 +8,9 @@
 [app]
 port = ""
 log_path = ""
+dings = [
+    "key;/Users/Laily/a.sh"
+]
 
 [[project]]
 project_addr = "http://github.com/Laily123/test" 

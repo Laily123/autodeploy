@@ -1,31 +1,32 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"os/exec"
-
-	log "github.com/sirupsen/logrus"
 )
 
-func ExecShell(path, shellName string) {
+/*
+	执行 shell 文件
+*/
+
+func ExecShell(path, shellName string) error {
 	shellPath := path
-	if path[len(path)-1] != '/' {
-		shellPath += "/"
+	if path[len(path)-1] != byte(os.PathSeparator) {
+		shellPath += string(os.PathSeparator)
 	}
 	shellPath += shellName
 	if exist := fileExist(shellPath); !exist {
-		log.Error("shell file not exist, ", shellPath)
-		return
+		return fmt.Errorf("shell file not exist, %s\n", shellPath)
 	}
 	cmd := exec.Command("/bin/bash", shellPath)
 	cmd.Dir = path
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		log.Errorf("exec comment %s err: %s, %s", shellPath, string(output), err)
-		return
+		return fmt.Errorf("exec comment %s err: %s, %s", shellPath, string(output), err)
 	}
-	log.Infof("exec command %s:%s\n", shellPath, string(output))
+	return nil
 }
 
 func fileExist(filePath string) bool {
@@ -36,9 +37,13 @@ func fileExist(filePath string) bool {
 	return true
 }
 
-func ResponseErr(w http.ResponseWriter) {
+func ResponseErr(w http.ResponseWriter, msg string) {
 	w.WriteHeader(501)
-	w.Write([]byte{})
+	if msg == "" {
+		w.Write([]byte{})
+	} else {
+		w.Write([]byte(msg))
+	}
 }
 
 // PushInfo push 过来的数据
